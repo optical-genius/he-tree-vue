@@ -95,11 +95,11 @@ var template = function template(h) {
       }, [h("div", {
         "class": "tree-node ".concat(noUndefined(node.$nodeClass)),
         "style": node.$nodeStyle || {}
-      }, [slotDefault()])]), (node.children && node.children.length) > 0 && h(transitionComponent, {
+      }, [slotDefault()])]), (node.havenote && node.havenote.length) > 0 && h(transitionComponent, {
         "attrs": {
           "name": this.$props.foldingTransitionName
         }
-      }, [!node.$folded && childrenListTpl(node.children, node, path)])]);
+      }, [!node.$folded && childrenListTpl(node.havenote, node, path)])]);
     };
 
     return h("div", {
@@ -113,7 +113,7 @@ var template = function template(h) {
     "attrs": {
       "data-tree-id": this.treeId
     }
-  }, [this.blockHeader && this.blockHeader(), childrenListTpl(this.rootNode.children, this.rootNode, []), this.blockFooter && this.blockFooter()]);
+  }, [this.blockHeader && this.blockHeader(), childrenListTpl(this.rootNode.havenote, this.rootNode, []), this.blockFooter && this.blockFooter()]);
 };
 
 var trees = {};
@@ -210,7 +210,7 @@ var Tree = {
   created() {
     //
     var updateRootNode = () => {
-      this.$set(this.rootNode, 'children', this.treeData);
+      this.$set(this.rootNode, 'havenote', this.treeData);
     };
 
     this.$watch('rootNode', updateRootNode, {
@@ -355,12 +355,12 @@ var check = {
       reversedParents.reverse();
 
       for (var parent of reversedParents) {
-        this.$set(parent, '$checked', parent.children.every(child => child.$checked));
+        this.$set(parent, '$checked', parent.havenote.every(child => child.$checked));
       } // update children
 
 
-      if (node.children && node.children.length > 0) {
-        walkTreeData(node.children, childNode => {
+      if (node.havenote && node.havenote.length > 0) {
+        walkTreeData(node.havenote, childNode => {
           this.$set(childNode, '$checked', node.$checked);
         });
       }
@@ -690,8 +690,8 @@ function makeTreeDraggable(treeEl) {
             var childrenEl = branch.querySelector(".".concat(options.childrenClass));
 
             if (childrenEl) {
-              for (var i = 0; i < childrenEl.children.length; i++) {
-                var child = childrenEl.children[i];
+              for (var i = 0; i < childrenEl.havenote.length; i++) {
+                var child = childrenEl.havenote[i];
 
                 if (child !== movingEl && hasClass(child, options.branchClass)) {
                   walkToGetNodes(child);
@@ -816,8 +816,8 @@ function makeTreeDraggable(treeEl) {
 
       var conditions = {
         'no closest': () => !info.closestNode,
-        'closest is top': () => info.closestBranch === findNodeList(info.root.children, el => el !== movingEl && !isElementHidden(el)),
-        'closest is top excluding placeholder': () => info.closestBranch === findNodeList(info.root.children, el => el !== movingEl && el !== store.placeholder && !isElementHidden(el)),
+        'closest is top': () => info.closestBranch === findNodeList(info.root.havenote, el => el !== movingEl && !isElementHidden(el)),
+        'closest is top excluding placeholder': () => info.closestBranch === findNodeList(info.root.havenote, el => el !== movingEl && el !== store.placeholder && !isElementHidden(el)),
         'on closest middle': () => movingNodeOf.y < info.closestNodeOffset.y + info.closestNode.offsetHeight / 2,
         'at closest indent right': () => movingNodeOf.x > info.closestNodeOffset.x + options.indent,
         'at closest left': () => movingNodeOf.x < info.closestNodeOffset.x,
@@ -829,7 +829,7 @@ function makeTreeDraggable(treeEl) {
           var childrenEl = info.closestBranch.querySelector(".".concat(options.childrenClass));
 
           if (childrenEl) {
-            return findNodeList(childrenEl.children, el => el !== movingEl && el !== store.placeholder && !isElementHidden(el));
+            return findNodeList(childrenEl.havenote, el => el !== movingEl && el !== store.placeholder && !isElementHidden(el));
           }
         }
       }; // convert conditions result to Boolean
@@ -876,7 +876,7 @@ function makeTreeDraggable(treeEl) {
           var placeholderNodeBack = store.placeholder.querySelector(".".concat(options.nodeBackClass));
           placeholderNodeBack.style.paddingLeft = (placeholderPath.length - 1) * options.indent + 'px'; // remove tempChildren if empty
 
-          if (store.tempChildren.children.length === 0) {
+          if (store.tempChildren.havenote.length === 0) {
             removeEl(store.tempChildren);
           }
         }));
@@ -1465,7 +1465,7 @@ var script = {
 
         store.targetTree = targetTree;
 
-        if (!resolveValueOrGettter(store.startTree === store.targetTree) && resolveValueOrGettter(this._Draggable_unfoldTargetNode, [false, this.treeData]) !== this.rootNode.children) {
+        if (!resolveValueOrGettter(store.startTree === store.targetTree) && resolveValueOrGettter(this._Draggable_unfoldTargetNode, [false, this.treeData]) !== this.rootNode.havenote) {
           return false;
         }
       },
@@ -1495,7 +1495,7 @@ var script = {
             // remove from start position
             var startParentPath = arrayWithoutEnd(startPath, 1);
             var startParent = startTree.getNodeByPath(startParentPath);
-            var startSiblings = startParentPath.length === 0 ? startTree.treeData : startParent.children;
+            var startSiblings = startParentPath.length === 0 ? startTree.treeData : startParent.havenote;
             var startIndex = arrayLast(startPath);
             startSiblings.splice(startIndex, 1); // update targetPath
 
@@ -1533,11 +1533,11 @@ var script = {
           if (targetParentPath.length === 0) {
             targetSiblings = targetTree.treeData;
           } else {
-            if (!targetParent.children) {
-              this.$set(targetParent, 'children', []);
+            if (!targetParent.havenote) {
+              this.$set(targetParent, 'havenote', []);
             }
 
-            targetSiblings = targetParent.children;
+            targetSiblings = targetParent.havenote;
           }
 
           var targetIndex = arrayLast(targetPath);
