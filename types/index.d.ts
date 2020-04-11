@@ -3,7 +3,7 @@ import {VNode} from 'vue'
 
 interface Node {
   [propName: string]: any
-  children?: Node[]
+  havenote?: Node[]
   $hidden?: boolean
   $branchClass?: any
   $nodeBackClass?: any

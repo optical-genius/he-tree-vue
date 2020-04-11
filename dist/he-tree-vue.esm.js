@@ -103,7 +103,7 @@ var template = function template(h) {
     };
 
     return h("div", {
-      "class": "tree-children ".concat(noUndefined(parent === this.rootNode && 'tree-root'), " ").concat(noUndefined(parent.$childrenClass)),
+      "class": "tree-havenote ".concat(noUndefined(parent === this.rootNode && 'tree-root'), " ").concat(noUndefined(parent.$childrenClass)),
       "style": parent.$childrenStyle || {}
     }, [nodes.map(branchTpl)]);
   };
@@ -1314,7 +1314,7 @@ var script = {
       for (var {
         value: el,
         index: index2
-      } of iterateAll(branchEl.parentElement.children)) {
+      } of iterateAll(branchEl.parentElement.havenote)) {
         if (hasClass(el, 'tree-branch') || hasClass(el, 'tree-placeholder')) {
           if (el === branchEl) {
             break;
@@ -1340,7 +1340,7 @@ var script = {
       cloneWhenDrag: this.cloneWhenDrag,
       treeClass: 'he-tree',
       rootClass: 'tree-root',
-      childrenClass: 'tree-children',
+      childrenClass: 'tree-havenote',
       branchClass: 'tree-branch',
       nodeClass: 'tree-node',
       nodeBackClass: 'tree-node-back',

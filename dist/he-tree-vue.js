@@ -1190,7 +1190,7 @@
 
 
   function depthFirstSearch(obj, handler) {
-    var childrenKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'children';
+    var childrenKey = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'havenote';
     var reverse = arguments.length > 3 ? arguments[3] : undefined;
     var rootChildren = isArray(obj) ? obj : [obj]; //
 
@@ -1198,16 +1198,16 @@
       classCallCheck(this, StopException);
     };
 
-    var func = function func(children, parent, parentPath) {
+    var func = function func(havenote, parent, parentPath) {
       if (reverse) {
-        children = children.slice();
-        children.reverse();
+          havenote = havenote.slice();
+          havenote.reverse();
       }
 
-      var len = children.length;
+      var len = havenote.length;
 
       for (var i = 0; i < len; i++) {
-        var item = children[i];
+        var item = havenote[i];
         var index = reverse ? len - i - 1 : i;
         var path = parentPath ? [].concat(toConsumableArray(parentPath), [index]) : []; // todo change args in next version
 
@@ -1216,7 +1216,7 @@
         if (r === false) {
           // stop
           throw new StopException();
-        } else if (r === 'skip children') {
+        } else if (r === 'skip havenote') {
           continue;
         } else if (r === 'skip siblings') {
           break;
@@ -1246,7 +1246,7 @@
     function TreeData(data) {
       classCallCheck(this, TreeData);
 
-      this.childrenKey = 'children';
+      this.childrenKey = 'havenote';
       this.data = data;
     }
 
@@ -1502,7 +1502,7 @@
     }, {
       key: "removeNode",
       value: function removeNode(path) {
-        var childrenKey = this.childrenKey,
+        var havenoteKey = this.childrenKey,
             rootChildren = this.rootChildren;
 
         var _this$getNodeIndexAnd2 = this.getNodeIndexAndParent(path),
@@ -2372,7 +2372,7 @@
 
       //
       var updateRootNode = function updateRootNode() {
-        _this2.$set(_this2.rootNode, 'children', _this2.treeData);
+        _this2.$set(_this2.rootNode, 'havenote', _this2.treeData);
       };
 
       this.$watch('rootNode', updateRootNode, {
@@ -2603,10 +2603,10 @@
         try {
           for (var _iterator = reversedParents[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
             var parent = _step.value;
-            this.$set(parent, '$checked', parent.children.every(function (child) {
+            this.$set(parent, '$checked', parent.havenote.every(function (child) {
               return child.$checked;
             }));
-          } // update children
+          } // update havenote
 
         } catch (err) {
           _didIteratorError = true;
@@ -2623,8 +2623,8 @@
           }
         }
 
-        if (node.children && node.children.length > 0) {
-          walkTreeData$1(node.children, function (childNode) {
+        if (node.havenote && node.havenote.length > 0) {
+          walkTreeData$1(node.havenote, function (childNode) {
             _this.$set(childNode, '$checked', node.$checked);
           });
         }
@@ -3426,8 +3426,8 @@
               var childrenEl = branch.querySelector(".".concat(options.childrenClass));
 
               if (childrenEl) {
-                for (var i = 0; i < childrenEl.children.length; i++) {
-                  var child = childrenEl.children[i];
+                for (var i = 0; i < childrenEl.havenote.length; i++) {
+                  var child = childrenEl.havenote[i];
 
                   if (child !== movingEl && hasClass(child, options.branchClass)) {
                     walkToGetNodes(child);
@@ -3567,12 +3567,12 @@
             return !info.closestNode;
           },
           'closest is top': function closestIsTop() {
-            return info.closestBranch === findNodeList(info.root.children, function (el) {
+            return info.closestBranch === findNodeList(info.root.havenote, function (el) {
               return el !== movingEl && !isElementHidden(el);
             });
           },
           'closest is top excluding placeholder': function closestIsTopExcludingPlaceholder() {
-            return info.closestBranch === findNodeList(info.root.children, function (el) {
+            return info.closestBranch === findNodeList(info.root.havenote, function (el) {
               return el !== movingEl && el !== store.placeholder && !isElementHidden(el);
             });
           },
@@ -3601,7 +3601,7 @@
             var childrenEl = info.closestBranch.querySelector(".".concat(options.childrenClass));
 
             if (childrenEl) {
-              return findNodeList(childrenEl.children, function (el) {
+              return findNodeList(childrenEl.havenote, function (el) {
                 return el !== movingEl && el !== store.placeholder && !isElementHidden(el);
               });
             }
@@ -3658,7 +3658,7 @@
                     placeholderNodeBack = store.placeholder.querySelector(".".concat(options.nodeBackClass));
                     placeholderNodeBack.style.paddingLeft = (placeholderPath.length - 1) * options.indent + 'px'; // remove tempChildren if empty
 
-                    if (store.tempChildren.children.length === 0) {
+                    if (store.tempChildren.havenote.length === 0) {
                       removeEl(store.tempChildren);
                     }
 
@@ -4352,7 +4352,7 @@
         var _iteratorError3 = undefined;
 
         try {
-          for (var _iterator3 = iterateAll(branchEl.parentElement.children)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+          for (var _iterator3 = iterateAll(branchEl.parentElement.havenote)[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
             var _step3$value = _step3.value,
                 el = _step3$value.value,
                 index2 = _step3$value.index;
@@ -4394,7 +4394,7 @@
         cloneWhenDrag: this.cloneWhenDrag,
         treeClass: 'he-tree',
         rootClass: 'tree-root',
-        childrenClass: 'tree-children',
+        childrenClass: 'tree-havenote',
         branchClass: 'tree-branch',
         nodeClass: 'tree-node',
         nodeBackClass: 'tree-node-back',
@@ -4539,7 +4539,7 @@
 
           store.targetTree = targetTree;
 
-          if (!resolveValueOrGettter(store.startTree === store.targetTree) && resolveValueOrGettter(_this._Draggable_unfoldTargetNode, [false, _this.treeData]) !== _this.rootNode.children) {
+          if (!resolveValueOrGettter(store.startTree === store.targetTree) && resolveValueOrGettter(_this._Draggable_unfoldTargetNode, [false, _this.treeData]) !== _this.rootNode.havenote) {
             return false;
           }
         },
@@ -4566,7 +4566,7 @@
               // remove from start position
               var startParentPath = arrayWithoutEnd(startPath, 1);
               var startParent = startTree.getNodeByPath(startParentPath);
-              var startSiblings = startParentPath.length === 0 ? startTree.treeData : startParent.children;
+              var startSiblings = startParentPath.length === 0 ? startTree.treeData : startParent.havenote;
               var startIndex = arrayLast(startPath);
               startSiblings.splice(startIndex, 1); // update targetPath
 
@@ -4604,11 +4604,11 @@
             if (targetParentPath.length === 0) {
               targetSiblings = targetTree.treeData;
             } else {
-              if (!targetParent.children) {
-                _this.$set(targetParent, 'children', []);
+              if (!targetParent.havenote) {
+                _this.$set(targetParent, 'havenote', []);
               }
 
-              targetSiblings = targetParent.children;
+              targetSiblings = targetParent.havenote;
             }
 
             var targetIndex = arrayLast(targetPath);
